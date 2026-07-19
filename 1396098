@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveRateX | Professional Live Currency Exchange Rates</title>
+    <meta name="description" content="Get real-time global currency exchange rates and Sudan parallel market prices. USD, EUR, GBP, BTC, and more.">
+    <meta name="keywords" content="currency rates, exchange rates, Sudan parallel market, USD to SDG, BTC price, live forex">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-light: #f8fafc;
+            --card-light: #ffffff;
+            --text-light: #1e293b;
+            --text-muted-light: #64748b;
+            --border-light: #e2e8f0;
+            
+            --bg-dark: #0f172a;
+            --card-dark: #1e293b;
+            --text-dark: #f1f5f9;
+            --text-muted-dark: #94a3b8;
+            --border-dark: #334155;
+
+            --success: #10b981;
+            --warning: #f59e0b;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: var(--bg-dark);
+            --bg-card: var(--card-dark);
+            --text-main: var(--text-dark);
+            --text-muted: var(--text-muted-dark);
+            --border-color: var(--border-dark);
+        }
+
+        [data-theme="light"] {
+            --bg-page: var(--bg-light);
+            --bg-card: var(--card-light);
+            --text-main: var(--text-light);
+            --text-muted: var(--text-muted-light);
+            --border-color: var(--border-light);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transition: var(--transition);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            background: none;
+            border: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5%;
+        }
+
+        /* Hero & Search */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 15px 25px 15px 50px;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Section Titles */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+        }
+
+        /* Grid System */
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 4rem;
+        }
+
+        /* Card Styling */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .flag {
+            width: 40px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .currency-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+
+        .currency-code {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .rate-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 10px 0;
+            color: var(--primary);
+        }
+
+        .update-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Sudan Parallel Market Specific */
+        .parallel-market {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white !important;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 4rem;
+        }
+
+        .parallel-market .section-header {
+            border-left-color: var(--warning);
+            color: white;
+        }
+
+        .parallel-market .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .parallel-market .currency-code, .parallel-market .update-time {
+            color: #94a3b8;
+        }
+
+        .parallel-badge {
+            background: var(--warning);
+            color: #000;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 5% 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Loading Spinner */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-page);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .rates-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div id="loader"><div class="spinner"></div></div>
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-line"></i>
+            LiveRateX
+        </div>
+        <div class="nav-actions">
+            <button class="theme-toggle" id="themeBtn" title="Toggle Dark Mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Live Global Currency Rates</h1>
+            <p>Real-time exchange rates for professional traders and travelers.</p>
+            
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search currency (e.g. USD, Euro, Yen)...">
+            </div>
+        </section>
+
+        <!-- Sudan Parallel Market -->
+        <div class="parallel-market">
+            <div class="section-header">
+                <h2>Sudan Parallel Market <span class="parallel-badge">MANUAL UPDATE</span></h2>
+            </div>
+            <div class="rates-grid" id="parallelGrid">
+                <!-- Will be populated by JS -->
+            </div>
+        </div>
+
+        <!-- Global Rates -->
+        <div class="section-header">
+            <h2>Global Exchange Rates (Base USD)</h2>
+            <div class="update-time" id="globalTimestamp">
+                <i class="fas fa-sync-alt"></i> Syncing...
+            </div>
+        </div>
+        <div class="rates-grid" id="globalGrid">
+            <!-- Will be populated by JS -->
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>LiveRateX</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Providing accurate financial data and parallel market insights for the Sudanese and global market.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" onclick="showPage('about')">About Us</a></li>
+                        <li><a href="#" onclick="showPage('privacy')">Privacy Policy</a></li>
+                        <li><a href="#" onclick="showPage('contact')">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Market Status</h4>
+                    <ul style="color: var(--text-muted); font-size: 0.9rem;">
+                        <li>Forex: Open</li>
+                        <li>Crypto: 24/7</li>
+                        <li>Sudan Market: Active</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 LiveRateX. All rights reserved. Data provided for informational purposes only.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Hidden Modals for Pages -->
+    <div id="pageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:3000; overflow-y:auto; padding:20px;">
+        <div style="max-width:800px; margin:40px auto; background:var(--bg-card); padding:40px; border-radius:20px; position:relative;">
+            <button onclick="closePage()" style="position:absolute; right:20px; top:20px; background:none; border:none; color:var(--text-main); font-size:1.5rem; cursor:pointer;">&times;</button>
+            <div id="pageContent"></div>
+        </div>
+    </div>
+
+    <script>
+        /** 
+         * EDITABLE SECTION: SUDAN PARALLEL MARKET DATA
+         * Manually update these prices below
+         */
+        const SUDAN_DATA = [
+            { code: 'USD', name: 'US Dollar', rate: '1,250', flag: 'us' },
+            { code: 'SAR', name: 'Saudi Riyal', rate: '333', flag: 'sa' },
+            { code: 'AED', name: 'UAE Dirham', rate: '340', flag: 'ae' },
+            { code: 'EUR', name: 'Euro', rate: '1,340', flag: 'eu' },
+            { code: 'EGP', name: 'Egyptian Pound', rate: '25.5', flag: 'eg' }
+        ];
+
+        // Global Currencies to track from API
+        const TRACKED_FIAT = ['EUR', 'GBP', 'SAR', 'AED', 'EGP', 'TRY', 'JPY', 'CNY'];
+        const TRACKED_CRYPTO = ['BTC', 'ETH'];
+
+        // Theme Toggle Logic
+        const themeBtn = document.getElementById('themeBtn');
+        const body = document.body;
+
+        themeBtn.addEventListener('click', () => {
+            const newTheme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            themeBtn.innerHTML = newTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Initialize Sudan Market
+        function initSudanMarket() {
+            const grid = document.getElementById('parallelGrid');
+            grid.innerHTML = SUDAN_DATA.map(curr => `
+                <div class="card" data-name="${curr.name} ${curr.code}">
+                    <div class="card-top">
+                        <img src="https://flagcdn.com/w80/${curr.flag}.png" class="flag" alt="${curr.name}">
+                        <div class="currency-info">
+                            <h3>${curr.name}</h3>
+                            <span class="currency-code">${curr.code} / SDG</span>
+                        </div>
+                    </div>
+                    <div class="rate-value">${curr.rate}</div>
+                    <div class="update-time"><i class="far fa-clock"></i> Local Market Price</div>
+                </div>
+            `).join('');
+        }
+
+        // Fetch Global Rates
+        async function fetchGlobalRates() {
+            try {
+                // Fetching Fiat Rates
+                const response = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await response.json();
+                
+                // Fetching Crypto Rates (from CoinGecko)
+                const cryptoResp = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd');
+                const cryptoData = await cryptoResp.json();
+
+                const grid = document.getElementById('globalGrid');
+                let html = '';
+
+                // Add USD Base (Standardized)
+                html += renderCard('USD', 'United States Dollar', '1.00', 'us');
+
+                // Add tracked fiat
+                TRACKED_FIAT.forEach(code => {
+                    const rate = data.rates[code];
+                    const flagCode = getFlagCode(code);
+                    html += renderCard(code, getCurrencyName(code), rate.toLocaleString(undefined, {minimumFractionDigits: 2}), flagCode);
+                });
+
+                // Add tracked crypto
+                html += renderCard('BTC', 'Bitcoin', cryptoData.bitcoin.usd.toLocaleString(), 'btc');
+                html += renderCard('ETH', 'Ethereum', cryptoData.ethereum.usd.toLocaleString(), 'eth');
+
+                grid.innerHTML = html;
+                document.getElementById('globalTimestamp').innerHTML = `<i class="fas fa-check-circle"></i> Updated: ${new Date().toLocaleTimeString()}`;
+                
+                document.getElementById('loader').style.display = 'none';
+            } catch (error) {
+                console.error("Error fetching rates:", error);
+                document.getElementById('globalGrid').innerHTML = "<p>Error loading live rates. Please refresh.</p>";
+            }
+        }
+
+        function renderCard(code, name, rate, flag) {
+            const flagUrl = flag.length <= 2 
+                ? `https://flagcdn.com/w80/${flag}.png`
+                : `https://cryptologos.cc/logos/${name.toLowerCase()}-${flag}-logo.png`;
+
+            return `
+                <div class="card" data-name="${name} ${code}">
+                    <div class="card-top">
+                        <img src="${flagUrl}" class="flag" alt="${name}" onerror="this.src='https://ui-avatars.com/api/?name=${code}'">
+                        <div class="currency-info">
+                            <h3>${name}</h3>
+                            <span class="currency-code">${code} / USD</span>
+                        </div>
+                    </div>
+                    <div class="rate-value">${rate}</div>
+                    <div class="update-time"><i class="far fa-clock"></i> Real-time API</div>
+                </div>
+            `;
+        }
+
+        function getFlagCode(code) {
+            const mapping = { 'USD':'us', 'EUR':'eu', 'GBP':'gb', 'SAR':'sa', 'AED':'ae', 'EGP':'eg', 'TRY':'tr', 'JPY':'jp', 'CNY':'cn' };
+            return mapping[code] || code.toLowerCase();
+        }
+
+        function getCurrencyName(code) {
+            const names = { 'EUR':'Euro', 'GBP':'British Pound', 'SAR':'Saudi Riyal', 'AED':'UAE Dirham', 'EGP':'Egyptian Pound', 'TRY':'Turkish Lira', 'JPY':'Japanese Yen', 'CNY':'Chinese Yuan' };
+            return names[code] || code;
+        }
+
+        // Search Filter Logic
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.card').forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                card.style.display = name.includes(term) ? 'block' : 'none';
+            });
+        });
+
+        // Simple Page Router
+        function showPage(page) {
+            const modal = document.getElementById('pageModal');
+            const content = document.getElementById('pageContent');
+            modal.style.display = 'block';
+            
+            const pages = {
+                about: `<h2>About LiveRateX</h2><p>LiveRateX is a premium financial dashboard providing live currency data. We specialize in providing transparent market rates including the Sudan parallel market prices which are often difficult to find in real-time.</p>`,
+                privacy: `<h2>Privacy Policy</h2><p>We do not collect any personal data. Your theme preference is stored locally on your device. We use public APIs to provide financial data for informational purposes only.</p>`,
+                contact: `<h2>Contact Us</h2><p>For inquiries or data corrections, please email: <b>support@liveratex.com</b><br><br>Our team updates the Sudan parallel market data every 4 hours during business days.</p>`
+            };
+            content.innerHTML = pages[page];
+        }
+
+        function closePage() {
+            document.getElementById('pageModal').style.display = 'none';
+        }
+
+        // Initial Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+            initSudanMarket();
+            fetchGlobalRates();
+            // Refresh rates every 2 minutes
+            setInterval(fetchGlobalRates, 120000);
+        });
+    </script>
+</body>
+</html>
